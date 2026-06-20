@@ -274,7 +274,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _showMessage(I18nService.t('history.no_measurements'), false);
       return;
     }
-    await Share.shareXFiles([XFile(path)]);
+    final box = context.findRenderObject() as RenderBox?;
+    await Share.shareXFiles(
+      [XFile(path)],
+      sharePositionOrigin:
+          box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+    );
     _showMessage(I18nService.t('settings.csv_exported').replaceAll('{path}', path), true);
   }
 

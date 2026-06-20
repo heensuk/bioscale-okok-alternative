@@ -371,9 +371,12 @@ class _CompositionScreenState extends State<CompositionScreen>
       final file = File('${dir.path}/bioscale_composition.png');
       await file.writeAsBytes(imageBytes);
 
+      final box = context.findRenderObject() as RenderBox?;
       await Share.shareXFiles(
         [XFile(file.path)],
         text: 'BioScale - ${I18nService.t('composition.title')}',
+        sharePositionOrigin:
+            box != null ? box.localToGlobal(Offset.zero) & box.size : null,
       );
     } catch (e) {
       debugPrint('Share error: $e');
