@@ -270,6 +270,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
     final path = await db.exportCsv(user['id'] as int);
+    if (path.isEmpty) {
+      _showMessage(I18nService.t('history.no_measurements'), false);
+      return;
+    }
     await Share.shareXFiles([XFile(path)]);
     _showMessage(I18nService.t('settings.csv_exported').replaceAll('{path}', path), true);
   }

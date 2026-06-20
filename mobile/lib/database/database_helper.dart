@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Singleton helper for the local SQLite database.
@@ -270,7 +272,12 @@ class DatabaseHelper {
       }).join(',');
       lines.add(values);
     }
-    return lines.join('\n');
+
+    final csv = lines.join('\n');
+    final dir = await getTemporaryDirectory();
+    final file = File(join(dir.path, 'bioscale_export.csv'));
+    await file.writeAsString(csv);
+    return file.path;
   }
 
   /// Delete all measurements for a user.
